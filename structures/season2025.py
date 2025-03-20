@@ -52,7 +52,7 @@ def get_round_count(players, tables):
 # Source: "Tournament Rules Handbook" at the following webpage:
 # https://www.pokemon.com/us/play-pokemon/about/tournaments-rules-and-resources
 def calculate_winrate(player, stages, current_round):
-    if player.drop_round is not None and player.drop_round < current_round:
+    if len(player.matches) < current_round:
         return
 
     results = {
@@ -86,7 +86,7 @@ def calculate_winrate(player, stages, current_round):
 # Calculates a player's first resistance tiebreaker.
 # Run after calculate_winrate above.
 def calculate_opp_winrate(player, stages, current_round):
-    if player.drop_round is not None and player.drop_round < current_round:
+    if len(player.matches) < current_round:
         return
 
     total = 0
@@ -109,7 +109,7 @@ def calculate_opp_winrate(player, stages, current_round):
 # Calculates a player's second resistance tiebreaker.
 # Run after calculate_opp_winrate above.
 def calculate_opp_opp_winrate(player, stages, current_round):
-    if player.drop_round is not None and player.drop_round < current_round:
+    if len(player.matches) < current_round:
         return
 
     total = 0

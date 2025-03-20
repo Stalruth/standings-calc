@@ -43,7 +43,7 @@ def get_round_count(players, tables):
 # Source: "Tournament Rules Handbook" at the following webpage:
 # https://www.pokemon.com/us/play-pokemon/about/tournaments-rules-and-resources
 def calculate_winrate(player, stages, current_round):
-    if player.drop_round is not None and player.drop_round < current_round:
+    if len(player.matches) < current_round:
         return
 
     results = {
@@ -52,8 +52,11 @@ def calculate_winrate(player, stages, current_round):
             'T': 0
     }
 
-    start = 0 if current_round < stages[0] else stages[0]
-    end = stages[0] if current_round < stages[0] else stages[0] + stages[1]
+    start = 0 if current_round <= stages[0] else stages[0]
+    end = stages[0] if current_round <= stages[0] else stages[0] + stages[1]
+
+    if current_round < start or current_round > end:
+        return
 
     for match in player.matches[start:end]:
         if match.player.name == 'BYE' or match.status is None:
@@ -81,14 +84,17 @@ def calculate_winrate(player, stages, current_round):
 # Calculates a player's first resistance tiebreaker.
 # Run after calculate_winrate above.
 def calculate_opp_winrate(player, stages, current_round):
-    if player.drop_round is not None and player.drop_round < current_round:
+    if len(player.matches) < current_round:
+        return
+
+    start = 0 if current_round <= stages[0] else stages[0]
+    end = stages[0] if current_round <= stages[0] else stages[0] + stages[1]
+
+    if current_round < start or current_round > end:
         return
 
     total = 0
     count = 0
-
-    start = 0 if current_round < stages[0] else stages[0]
-    end = stages[0] if current_round < stages[0] else stages[0] + stages[1]
 
     for match in player.matches[start:end]:
         if match.player is None or match.player.id == 0:
@@ -107,11 +113,11 @@ def calculate_opp_winrate(player, stages, current_round):
 # Calculates a player's second resistance tiebreaker.
 # Run after calculate_opp_winrate above.
 def calculate_opp_opp_winrate(player, stages, current_round):
-    if player.drop_round is not None and player.drop_round < current_round:
+    if len(player.matches) < current_round:
         return
 
-    start = 0 if current_round < stages[0] else stages[0]
-    end = stages[0] if current_round < stages[0] else stages[0] + stages[1]
+    start = 0 if current_round <= stages[0] else stages[0]
+    end = stages[0] if current_round <= stages[0] else stages[0] + stages[1]
 
     if current_round < start or current_round > end:
         return

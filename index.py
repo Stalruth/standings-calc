@@ -233,15 +233,17 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
                         placement = placement + 1
                     else:
                         player.top_placement = None
+
             else:
                 round_players = [p for p in division.players if not p.is_dqed and len(p.matches) == current_round]
-
                 round_players.sort(key=lambda p: (p.matches[-1].status == 'W', *structure.hash_player_standing(p)), reverse=True)
 
                 for (i, player) in enumerate(round_players):
                     player.top_placement = i + 1
 
                 division.players = [*round_players, *division.players[len(round_players):]]
+
+            division.players.sort(key=lambda p: p.is_dqed)
 
             if current_round == division.total_swiss_rounds() + 1:
                 top_cut = [[]]
