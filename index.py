@@ -234,6 +234,24 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
                     else:
                         player.top_placement = None
 
+                rounds_dir = f'{division_output_dir}/rounds';
+                os.makedirs(rounds_dir, exist_ok=True)
+                with open(f'{rounds_dir}/{current_round}.json', 'w') as outfile:
+                    json.dump([{
+                            'id': player.id,
+                            'record': {
+                                'wins': player.wins,
+                                'losses': player.losses,
+                                'ties': player.ties,
+                            },
+                            'resistances': {
+                                'self': player.win_percentage,
+                                'opp': player.opp_win_percentage,
+                                'oppopp': player.oppopp_win_percentage
+                            }
+                        } for player in division.players],
+                        outfile, separators=(',',':'), ensure_ascii=False)
+
             else:
                 round_players = [p for p in division.players if not p.is_dqed and len(p.matches) == current_round]
                 round_players.sort(key=lambda p: (p.matches[-1].status == 'W', *structure.hash_player_standing(p)), reverse=True)
