@@ -107,6 +107,7 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
             continue
 
         winner = None
+        swiss = []
         top_cut = None
 
         try:
@@ -234,10 +235,7 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
                     else:
                         player.top_placement = None
 
-                rounds_dir = f'{division_output_dir}/rounds';
-                os.makedirs(rounds_dir, exist_ok=True)
-                with open(f'{rounds_dir}/{current_round}.json', 'w') as outfile:
-                    json.dump([{
+                swiss.append([{
                             'id': player.id,
                             'record': {
                                 'wins': player.wins,
@@ -249,8 +247,7 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
                                 'opp': player.opp_win_percentage,
                                 'oppopp': player.oppopp_win_percentage
                             }
-                        } for player in division.players],
-                        outfile, separators=(',',':'), ensure_ascii=False)
+                        } for player in division.players])
 
             else:
                 round_players = [p for p in division.players if not p.is_dqed and len(p.matches) == current_round]
@@ -337,6 +334,10 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
             json.dump({player.id: player for player in division.players},
                       outfile, default=lambda o: o.to_json(division, teams),
                       separators=(',',':'), ensure_ascii=False)
+
+        with open(f'{division_output_dir}/round_standings.json', 'w') as outfile:
+            json.dump(swiss, outfile, separators=(',',':'),
+                      ensure_ascii=False)
 
         if len(published_standings) > 0:
             with open(f'{division_output_dir}/discrepancy.txt', 'w') as outfile:
