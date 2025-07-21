@@ -320,19 +320,13 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
                     'rounds': top_cut
                 }, outfile, separators=(',',':'), ensure_ascii=False)
 
-        try:
-            with open(f'{division_input_dir}/teams.json', 'r') as infile:
-                teams = json.load(infile)
-        except FileNotFoundError:
-            teams = None
-
         with open(f'{division_output_dir}/standings.json', 'w') as outfile:
             json.dump([player.id for player in division.players],
                       outfile, separators=(',',':'), ensure_ascii=False)
 
         with open(f'{division_output_dir}/players.json', 'w') as outfile:
             json.dump({player.id: player for player in division.players},
-                      outfile, default=lambda o: o.to_json(division, teams),
+                      outfile, default=lambda o: o.to_json(division),
                       separators=(',',':'), ensure_ascii=False)
 
         with open(f'{division_output_dir}/round_standings.json', 'w') as outfile:

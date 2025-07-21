@@ -75,7 +75,7 @@ class Player:
         return output
 
     # toJson
-    def to_json(self, division, teams):
+    def to_json(self, division):
         matches = [
             {
                 'id': getattr(match.player, 'id', 0),
@@ -119,10 +119,6 @@ class Player:
             'drop': self.drop_round if self.drop_round is not None else -1,
             'rounds': round_sets
         }
-
-        if teams is not None:
-            result['team'] = teams[f'{self.id}']['fullTeam']
-            result['paste'] = teams[f'{self.id}']['paste']
 
         return result
 
