@@ -174,9 +174,9 @@ def main_worker(tour_id, output_dir, input_dir, season, structure):
                                 break
                         else:
                             match = Player(player['name'], division_name,
-                                                len(division.players + 2),
+                                                len(division.players) + 2,
                                                 True, False);
-                            division.players.add(match)
+                            division.players.append(match)
                             print(f'Added new player: {current_round} {match}')
 
                         for i in range(current_round - match.wins -
