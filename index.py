@@ -8,6 +8,7 @@ from event import Event, Division
 
 import structures.season2024
 import structures.season2025
+import structures.season2026
 
 
 def get_last_round(matches):
@@ -364,12 +365,12 @@ if __name__ == '__main__':
     parser.add_argument(
         '--season',
         help='VGC season the tournament is for',
-        default='2025'
+        default='2026'
     )
     parser.add_argument(
         '--structure',
         help='Tournament Structure',
-        default='2025'
+        default='2026'
     )
 
     args = parser.parse_args()
@@ -381,7 +382,9 @@ if __name__ == '__main__':
     '''
     os.makedirs(args.output_dir, exist_ok=True)
 
-    if args.structure == '2025':
+    if args.structure == '2026':
+        structure = structures.season2026
+    elif args.structure == '2025':
         structure = structures.season2025
     elif args.structure == '2024':
         structure = structures.season2024
