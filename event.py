@@ -4,11 +4,12 @@ import math
 
 
 class Division:
-    def __init__(self, players, tables, get_round_count):
+    def __init__(self, players, tables, get_round_count, get_round_set_names):
         self.players = players
         self.tables = tables
         starting_players = len([p for p in players if not p.is_late])
         self.structure = get_round_count(starting_players, tables)
+        self.round_set_names = get_round_set_names(self.structure)
         self.winner = None
 
     def total_swiss_rounds(self):

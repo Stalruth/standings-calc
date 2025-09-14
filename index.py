@@ -34,7 +34,7 @@ def single_elim_order(players):
     return [min(match[0], match[1]) for match in matches]
 
 
-def create_event(base_dir, season, get_round_count):
+def create_event(base_dir, season, get_round_count, get_round_set_names):
     with open(f'{base_dir}/tournament.json', 'r') as infile:
         raw_tour = json.load(infile)
     divisions = {}
@@ -50,7 +50,7 @@ def create_event(base_dir, season, get_round_count):
                            in json.load(players_json).items()
                           ]
                 tables = json.load(tables_json)
-                divisions[division] = Division(players, tables, get_round_count)
+                divisions[division] = Division(players, tables, get_round_count, get_round_set_names)
         except FileNotFoundError:
             divisions[division] = Division([], [], get_round_count)
 
@@ -92,13 +92,13 @@ def match_record(table_player, candidate):
 def main_worker(tour_id, output_dir, input_dir, season, structure):
     base_input_dir = f'{input_dir}/{tour_id}'
     base_output_dir = f'{output_dir}/{tour_id}'
-    tour_data = create_event(base_input_dir, season, structure.get_round_count)
+    tour_data = create_event(base_input_dir, season, structure.get_round_count, structure.get_round_set_names)
 
     for division_name in tour_data.divisions:
         print(f'{tour_id}/{division_name}')
 
         division = tour_data.divisions[division_name]
-        print(f'{len(division.players)} | {division.structure[0]}+{division.structure[1]}+{division.structure[2]}')
+        print(f'{len(division.players)} | {division.structure[0]} + {division.structure[1]} + Asym. Top {division.structure[2]}')
 
         division_input_dir = f'{base_input_dir}/{division_name}'
         division_output_dir = f'{base_output_dir}/{division_name}'

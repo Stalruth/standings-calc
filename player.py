@@ -85,19 +85,19 @@ class Player:
         ]
         round_sets = []
         round_sets.append({
-            'name': 'Swiss' if division.structure[1] == 0 else 'Day 1 Swiss',
+            'name': division.round_set_names[0],
             'rounds': matches[:division.structure[0]]
         })
 
         if division.structure[1] > 0 and len(matches) > division.structure[0]:
             round_sets.append({
-                'name': 'Day 2 Swiss',
+                'name': division.round_set_names[1],
                 'rounds': matches[division.structure[0] : division.total_swiss_rounds()]
             })
 
         if division.structure[2] != 0 and len(matches) > division.total_swiss_rounds():
             round_sets.append({
-                'name': 'Top Cut',
+                'name': division.round_set_names[-1],
                 'rounds': matches[division.total_swiss_rounds():]
             })
 

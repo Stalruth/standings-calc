@@ -2,7 +2,7 @@ import math
 
 # Day 1 rounds, Day 2 rounds, Min # Cut
 round_structures = [
-        (3, 0, None),   # 4-8
+        (3, 0, 0),      # 4-8
         (4, 0, 2),      # 9-16
         (6, 0, 4),      # 17-32
         (7, 0, 6),      # 33-64
@@ -165,4 +165,11 @@ def apply_points(division):
 
     for i in range(cutoff):
         division.players[i].awards_placement = 2 ** math.ceil(math.log2(i + 1))
+
+def get_round_set_names(structure):
+    if structure[1] == 0:
+        if structure[2] == 0:
+            return ['Swiss']
+        return ['Swiss', 'Top Cut']
+    return ['Swiss Phase 1', 'Swiss Phase 2', 'Top Cut']
 

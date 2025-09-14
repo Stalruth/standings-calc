@@ -166,3 +166,10 @@ def apply_points(division):
     for i in range(cutoff):
         division.players[i].awards_placement = 2 ** math.ceil(math.log2(i + 1))
 
+def get_round_set_names(structure):
+    if structure[1] == 0:
+        if structure[2] == 0:
+            return ['Swiss']
+        return ['Swiss', 'Top Cut']
+    return ['Swiss Day 1', 'Swiss Day 2', 'Top Cut']
+
